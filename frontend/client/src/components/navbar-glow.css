@@ -1,0 +1,23 @@
+
+.glowing-navbar {
+  border-radius: 0.5rem; 
+  animation: glow 4s linear infinite;
+}
+
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 8px #ff0000;
+  }
+  25% {
+    box-shadow: 0 0 8px #00ff00;
+  }
+  50% {
+    box-shadow: 0 0 8px #0000ff;
+  }
+  75% {
+    box-shadow: 0 0 8px #ff00ff;
+  }
+  100% {
+    box-shadow: 0 0 8px #ff0000;
+  }
+}
