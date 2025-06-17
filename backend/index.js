@@ -135,7 +135,7 @@ app.post("/add-note", authenticateToken, async (req, res) => {
   }
 });
 
-app.put("/edit-note/:noteId", authenticateToken, async (req, res) => {
+app.post("/edit-note/:noteId", authenticateToken, async (req, res) => {
   const noteId = req.params.noteId;
   const { title, content, tags, isPinned } = req.body;
   const { user } = req.user;
@@ -261,6 +261,39 @@ app.get("/get-user",authenticateToken, async (req, res) => {
     message: ""
   });
 });
+
+app.get("/search-notes/", authenticateToken, async (req, res) =>{
+  const {user} = req.user;
+  const { query }=req.query;
+
+  if(!query){
+    return res
+     .status(400)
+     .json({error:true , message:"Search Query Is Required"})
+  }
+
+  try {
+    const matchingNotes = await Note.find({
+      userId: user._id,
+      $or:[
+        {title: { $regex: new RegExp(query,"i")}},
+        {content: { $regex: new RegExp(query,"i")}}
+      ]
+    });
+    return res.json({
+      error: false,
+      notes: matchingNotes,
+      message:"Notes Matching The Search Query Retrived Sucessfully",
+    })
+  } catch (error) {
+    return res.status(500).json({
+      error: true,
+      message: "Internal Server Error "
+    });
+  }
+});
+
+
 
 
 

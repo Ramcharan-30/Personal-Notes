@@ -1,44 +1,41 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import ProfileInfo from './ProfileInfo';
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 import SearchBar from './SearchBar';
 import './navbar-glow.css'; 
 
+const Navbar = ({ userInfo, onSearchNote, handleClearSearch }) => {
+  const [SearchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
-const Navbar = () => {
+  const onLogout = () => {
+    localStorage.clear();
+    navigate("/login");
+  };
 
-  const [SearchQuery,setSearchQuery] = useState("")
+  const handleSearch = () => {
+    if (SearchQuery) onSearchNote(SearchQuery);
+  };
 
-  const navigate = useNavigate()
-
-  const onLogout = ()=>{
-    navigate("/login")
-  }
-
-  const handleSearch= () =>{
-
-  }
-
-  const onClearSearch = () =>{
-    setSearchQuery("")
-  }
+  const onClearSearch = () => {
+    setSearchQuery("");
+    handleClearSearch();
+  };
 
   return (
-    <div className='bg-white flex items-center justify-between px-6 py-2 drop-shadow glowing-navbar'>
-        <h2 className="text-xl font-medium text-grey-800 py-2">My Notes</h2>
+    <div className="bg-white flex items-center justify-between px-10 py-4 shadow-xl glowing-navbar border-b">
+      <h2 className="text-2xl font-semibold text-gray-800 tracking-wide">📝 My Notes</h2>
 
-        <SearchBar 
-         value={SearchQuery} 
-          onChange={(e)=>{
-            setSearchQuery(e.target.value)
-          }}
-          handleSearch={handleSearch}
-          onClearSearch={onClearSearch}
-         />
+      <SearchBar
+        value={SearchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+        handleSearch={handleSearch}
+        onClearSearch={onClearSearch}
+      />
 
-        <ProfileInfo onLogout={onLogout} />
+      <ProfileInfo userInfo={userInfo} onLogout={onLogout} />
     </div>
-  )
-}
+  );
+};
 
 export default Navbar;
